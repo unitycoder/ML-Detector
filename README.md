@@ -5,6 +5,16 @@
 This is a library for classifying images in Unity Engine using NatML. The following ML models are included:
 - [TinyYOLO v3](https://github.com/onnx/models/tree/master/vision/object_detection_segmentation/tiny-yolov3)
 
+## Setup Instructions
+This package requires NatML, so make sure NatML is imported into your project. Then in your project's `Packages/manifest.json` file, add the following:
+```json
+{
+  "dependencies": {
+    "com.natsuite.ml.detection": "git+https://github.com/natsuite/ML-Detection"
+  }
+}
+```
+
 ## Detecting Objects in an Image
 First, assign the object detection model (in the `ML` folder) to an `MLModelData` field in your script:
 ```csharp
