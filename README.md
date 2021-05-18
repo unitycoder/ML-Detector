@@ -42,7 +42,46 @@ Texture2D image = ...;
 ```
 
 ## Visualizing Detections
-*INCOMPLETE*
+To visualize the detections, we will use Unity UI along with Visualizers included in NatML. First, create a UI `RawImage` to display our image. Then add an `MLDetectionVisualizer` component:
+
+![panel](.media/panel.png)
+
+Next, we have to create a prefab rectangle that will be instantiated for every detected object. You can customize this as you desire, but for this example we will create a simple semi-transparent UI rectangle:
+
+![rect](.media/rect.png)
+
+We need to add a UI text that will display the detected object's label:
+
+![text](.media/text.png)
+
+Now, add an `MLDetectionRect` component to our prefab and assign the `Label Text` field:
+
+![detection rect](.media/detrect.png)
+
+Finally, assign the prefab to the `MLDetectionVisualizer` and disable it in the scene:
+
+![assign](.media/assign.png)
+
+Now, we're ready to visualize detected objects. To do so, simply call the `Render` method on the visualizer:
+```csharp
+using System.Collections.Generic;   // For access to `List<>`
+using NatSuite.ML.Visualizers;      // For access to `MLDetectionVisualizer`
+
+MLDetectionVisualizer visualizer;   // Assign in Inspector
+
+void Detect () {
+    // Detect
+    Texture2D image = ...;
+    (string label, Rect rect, float score)[] detections = predictor.Predict(image);
+    // Visualize
+    var visualizations = new List<(Rect, string)>();
+    foreach (var (label, rect, confidence) in detections) {
+        var visualizationText = $"{label}: {confidence}";
+        visualizations.Add((rect, visualizationText));
+    }
+    visualizer.Render(previewTexture, visualizations.ToArray());
+}
+```
 
 ## Requirements
 - Unity 2019.2+
@@ -57,5 +96,5 @@ Texture2D image = ...;
 ## Quick Tips
 - See the [NatML documentation](https://docs.natsuite.io/natml).
 - Join the [NatSuite community on Discord](https://discord.gg/y5vwgXkz2f).
-- See [NatML on Unity Forums](https://forum.unity.com/threads/open-beta-natml-machine-learning-runtime.1109339/).
+- Discuss [NatML on Unity Forums](https://forum.unity.com/threads/open-beta-natml-machine-learning-runtime.1109339/).
 - Contact us at [hi@natsuite.io](mailto:hi@natsuite.io).
